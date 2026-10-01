@@ -27,5 +27,12 @@ spring:
     # Evita consultas "escondidas" desde el controller y quita el WARN que Spring muestra al arrancar.
     open-in-view: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER:https://tu-tenant.us.auth0.com/}
+          audiences: ${AUTH0_AUDIENCE:https://gestor-eventos-api}
+
   # Flyway no necesita configuración: por defecto ejecuta los scripts de classpath:db/migration
   # al arrancar, en orden de versión (V1, V2...), y registra los aplicados en la tabla flyway_schema_history.

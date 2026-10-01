@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,6 @@ public class EventoController {
 
     private final EventoService eventoService;
 
-    private static final String USUARIO_PRUEBA = "usuario_ejemplo";
 
     @GetMapping
     public List<EventoResponse> listarEventos() {
@@ -41,21 +42,23 @@ public class EventoController {
     }
 
     @PostMapping
-    public ResponseEntity<EventoResponse> crearEvento(@Valid @RequestBody EventoRequest request) {
-        var creado = eventoService.crear(request, USUARIO_PRUEBA);
+    public ResponseEntity<EventoResponse> crearEvento(@Valid @RequestBody EventoRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        var creado = eventoService.crear(request, jwt.getSubject());
         var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(creado.id()).toUri();
         return ResponseEntity.created(uri).body(creado);
     }
 
     @PutMapping("/{id}")
-    public EventoResponse actualizarEvento(@PathVariable UUID id, @Valid @RequestBody EventoRequest request) {
-        return eventoService.actualizar(id, request, USUARIO_PRUEBA);
+    public EventoResponse actualizarEvento(@PathVariable UUID id, @Valid @RequestBody EventoRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return eventoService.actualizar(id, request, jwt.getSubject());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEvento(@PathVariable UUID id) {
-        eventoService.eliminar(id, USUARIO_PRUEBA);
+    public ResponseEntity<Void> eliminarEvento(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+        eventoService.eliminar(id, jwt.getSubject());
         return ResponseEntity.noContent().build();
     }
 
