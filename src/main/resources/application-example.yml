@@ -1,0 +1,22 @@
+
+spring:
+  application:
+    name: gestor-eventos
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gestor_eventos
+    username: gestor
+    password: gestor_eventos
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  # --- OAuth 2.0 (Auth0) ----------------------------------------------------------
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://TU-TENANT.us.auth0.com/
+          audiences: https://gestor-eventos-api
