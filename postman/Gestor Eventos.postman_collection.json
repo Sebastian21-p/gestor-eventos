@@ -1,0 +1,311 @@
+{
+  "info": {
+    "_postman_id": "6da63f19-d552-495b-946b-8e48d254395e",
+    "name": "Gestor Eventos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3840339"
+  },
+  "item": [
+    {
+      "name": "0 - Auth",
+      "item": [
+        {
+          "name": "ClientA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Token obtenido\", () => pm.response.to.have.status(200));\npm.environment.set(\"tokenA\", pm.response.json().access_token);\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{clientIdA}}\",\n  \"client_secret\": \"{{clientSecretA}}\",\n  \"audience\": \"{{audience}}\",\n  \"grant_type\": \"client_credentials\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{auth0Domain}}/oauth/token",
+              "host": [
+                "{{auth0Domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ClientB",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Token obtenido\", () => pm.response.to.have.status(200));\npm.environment.set(\"tokenB\", pm.response.json().access_token);\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{clientIdB}}\",\n  \"client_secret\": \"{{clientSecretB}}\",\n  \"audience\": \"{{audience}}\",\n  \"grant_type\": \"client_credentials\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{auth0Domain}}/oauth/token",
+              "host": [
+                "{{auth0Domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "1 - Eventos",
+      "item": [
+        {
+          "name": "Listar eventos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Evento por Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/{{eventoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "{{eventoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Evento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"201 Created\", () => pm.response.to.have.status(201));\npm.collectionVariables.set(\"eventoId\", pm.response.json().id);\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenA}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Taller de Spring Boot\",\n  \"descripcion\": \"Introducción a APIs REST con Spring\",\n  \"fechaHora\": \"2026-11-15T18:00:00-05:00\",\n  \"ubicacion\": \"Biblioteca Central, Cúcuta\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/eventos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar evento",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Taller de Spring Boot act\",\n  \"descripcion\": \"Introducción a APIs REST con Spring act\",\n  \"fechaHora\": \"2026-11-15T18:00:00-05:00\",\n  \"ubicacion\": \"Biblioteca Central, Cúcuta\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/eventos/{{eventoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "{{eventoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar evento",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/eventos/{{eventoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "{{eventoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar evento denegado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenB}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Taller de Spring Boot act2\",\n  \"descripcion\": \"Introducción a APIs REST con Spring act2\",\n  \"fechaHora\": \"2026-11-15T18:00:00-05:00\",\n  \"ubicacion\": \"Biblioteca Central, Cúcuta\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/eventos/{{eventoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "eventos",
+                "{{eventoId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{tokenA}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "eventoId",
+      "value": ""
+    }
+  ]
+}
