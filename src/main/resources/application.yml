@@ -1,3 +1,31 @@
 spring:
   application:
     name: gestor-eventos
+
+  config:
+    # Spring no lee archivos .env por sí solo. Con esto importa el .env de la raíz del proyecto
+    # como si fuera un .properties ("[.properties]" le indica el formato).
+    # "optional:" evita que la app falle si el archivo no existe (por ejemplo en Docker o CI,
+    # donde las variables llegan como variables de entorno reales).
+    import: optional:file:.env[.properties]
+
+  datasource:
+    # ${VARIABLE:valor_por_defecto} -> si la variable no existe se usa el valor después de ":".
+    # Los valores por defecto coinciden con .env.example: así la app y los tests arrancan
+    # en un clon limpio. Sin default, un placeholder sin resolver rompe el arranque.
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:gestor_eventos}
+    username: ${DB_USER:gestor}
+    password: ${DB_PASSWORD:gestor_local}
+
+  jpa:
+    hibernate:
+      # El esquema lo crea y modifica Flyway (src/main/resources/db/migration).
+      # "validate" solo comprueba que las entidades coincidan con las tablas y, si no,
+      # falla al arrancar. Nunca uses "update"/"create" junto con Flyway.
+      ddl-auto: validate
+    # Cierra la sesión de Hibernate al terminar el servicio y no durante toda la petición HTTP.
+    # Evita consultas "escondidas" desde el controller y quita el WARN que Spring muestra al arrancar.
+    open-in-view: false
+
+  # Flyway no necesita configuración: por defecto ejecuta los scripts de classpath:db/migration
+  # al arrancar, en orden de versión (V1, V2...), y registra los aplicados en la tabla flyway_schema_history.
