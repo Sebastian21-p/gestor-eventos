@@ -36,10 +36,11 @@ public class EventoService {
     }
 
     @Transactional
-    public EventoResponse crear(EventoRequest req, String creadorId) {
+    public EventoResponse crear(EventoRequest req, String creadorId, String sub) {
         var evento = new Evento();
         copiarDatos(req, evento);
         evento.setCreadorId(creadorId);
+        evento.setDescripcion2(sub);
         var eventoGuardado = eventoRepository.save(evento);
         return EventoResponse.desde(eventoGuardado);
     }
@@ -60,6 +61,7 @@ public class EventoService {
     private void copiarDatos(EventoRequest req, Evento evento) {
         evento.setTitulo(req.titulo());
         evento.setDescripcion(req.descripcion());
+        evento.setDescripcion2(req.descripcion2());
         evento.setFechaHora(req.fechaHora());
         evento.setUbicacion(req.ubicacion());
     }

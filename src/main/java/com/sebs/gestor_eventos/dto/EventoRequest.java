@@ -13,6 +13,7 @@ public record EventoRequest(
     String titulo,
     @NotBlank (message = "La descripción es obligatoria")
     String descripcion,
+    String descripcion2,
     @NotNull(message = "La fecha y hora del evento es obligatoria")
     @Future(message = "La fecha del evento debe ser futura")
     OffsetDateTime fechaHora,

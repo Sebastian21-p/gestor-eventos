@@ -1,0 +1,1 @@
+ALTER TABLE eventos ADD COLUMN descripcion2 TEXT NOT NULL DEFAULT '';

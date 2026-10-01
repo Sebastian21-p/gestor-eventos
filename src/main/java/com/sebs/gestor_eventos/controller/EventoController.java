@@ -44,7 +44,8 @@ public class EventoController {
     @PostMapping
     public ResponseEntity<EventoResponse> crearEvento(@Valid @RequestBody EventoRequest request,
             @AuthenticationPrincipal Jwt jwt) {
-        var creado = eventoService.crear(request, jwt.getSubject());
+        var sub = jwt.getSubject();
+        var creado = eventoService.crear(request, jwt.getSubject(), sub);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(creado.id()).toUri();
         return ResponseEntity.created(uri).body(creado);

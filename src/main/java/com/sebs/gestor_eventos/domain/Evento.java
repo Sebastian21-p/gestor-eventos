@@ -43,6 +43,9 @@ public class Evento {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
 
+    @Column(columnDefinition = "TEXT")
+    private String descripcion2;
+
     @Column(nullable = false)
     private OffsetDateTime fechaHora;
 
